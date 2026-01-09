@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Password Security Analyzer</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <h1>Password Security Analyzer</h1>
+        <p class="subtitle">
+            Analyze password strength and check exposure in known data breaches
+        </p>
+
+        <form method="POST">
+            <input type="password" name="password" placeholder="Enter your password" required>
+            <button type="submit">Analyze Password</button>
+        </form>
+
+        {% if strength %}
+        <div class="security-board">
+
+            <div class="board-header">
+                <h3>Security Dashboard</h3>
+                <span class="risk {{ strength|lower }}">
+                    {{ strength }} Risk
+                </span>
+            </div>
+            <div class="meter">
+    <div class="segment weak {% if strength == 'Weak' %}active{% endif %}"></div>
+    <div class="segment medium {% if strength == 'Medium' %}active{% endif %}"></div>
+    <div class="segment strong {% if strength == 'Strong' %}active{% endif %}"></div>
+</div>
+
+
+            <div class="board-section">
+                <h4>Password Checklist</h4>
+                <div class="checks">
+                    <span class="check">✔ Minimum 8 characters</span>
+                    <span class="check">✔ Uppercase letter</span>
+                    <span class="check">✔ Number</span>
+                    <span class="check">✔ Special character</span>
+                </div>
+            </div>
+
+            <div class="board-section">
+                <h4>Strength Status</h4>
+                <div class="status {{ strength|lower }}">
+                    Strength: {{ strength }}
+                </div>
+            </div>
+
+            <div class="board-section">
+                <h4>Breach Status</h4>
+                {% if breached %}
+    <div class="status danger">
+        ⚠ Found in sample breach dataset
+    </div>
+{% else %}
+    <div class="status safe">
+        ✔ Not found in sample breach dataset
+    </div>
+{% endif %}
+
+            </div>
+
+            {% if suggestions %}
+            <div class="board-section">
+                <h4>Improvement Suggestions</h4>
+                <ul class="suggestions">
+                    {% for s in suggestions %}
+                        <li>{{ s }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
+</body>
+</html>
